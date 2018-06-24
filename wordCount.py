@@ -4,7 +4,7 @@ from pyspark.sql.functions import *
 
 if __name__ == "__main__":
 
-    if len(sys.argv) != 2:
+    if len(sys.argv) != 3:
         print("Usage: wordcount <file>")
         sys.exit(-1)
 
@@ -15,6 +15,7 @@ if __name__ == "__main__":
     lines = spark.sparkContext.textFile(sys.argv[1])
     counts = lines.flatMap(lambda line: line.split(' ')) \
         .map(lambda word: (word, 1)) \
-        .toDF(["word", "value"]).groupBy("word").agg({"value": "count"})
-    counts.show(n=100, truncate=False)
+        .toDF(["WORD", "VALUE"]).groupBy("WORD").agg({"VALUE": "count"})\
+        .withColumnRenamed('Count(value)', 'TOTAL_COUNT')
+    counts.coalesce(1).write.mode("overwrite").format("CSV").option("header", "true").save(sys.argv[2])
     spark.stop()
