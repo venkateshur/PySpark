@@ -7,21 +7,21 @@ def csvWriter(processedDf, outputPath, mode ='overwrite', codec = None, *paritio
         processedDf.write.mode(mode).csv(outputPath)
 
 
-def jsonWriter(processedDf, outputPath, mode ='overwrite', *paritionColumns):
+def jsonWriter(processedDf, outputPath, mode ='overwrite', codec = None,  *paritionColumns):
     if requiredPartitions(paritionColumns):
         processedDf.write.mode(mode).partitionBy(*paritionColumns).json(outputPath, compression = codec)
     else:
         processedDf.write.mode(mode).json(outputPath)
 
 
-def parquetWriter(processedDf, outputPath, mode ='overwrite', *paritionColumns):
+def parquetWriter(processedDf, outputPath, mode ='overwrite', codec = None, *paritionColumns):
     if requiredPartitions(paritionColumns):
         processedDf.write.mode(mode).partitionBy(*paritionColumns).parquet(outputPath, compression = codec)
     else:
         processedDf.write.mode(mode).parquet(outputPath)
 
 
-def text(processedDf, outputPath, mode ='overwrite', *paritionColumns):
+def text(processedDf, outputPath, mode ='overwrite', codec = None, *paritionColumns):
     if requiredPartitions(paritionColumns):
         processedDf.write.mode(mode).partitionBy(*paritionColumns).text(outputPath, compression = codec)
     else:
@@ -29,7 +29,7 @@ def text(processedDf, outputPath, mode ='overwrite', *paritionColumns):
 
 
 #data bricks library required to read xml files
-def xmlWriter(processedDf, outputPath, mode ='overwrite', *paritionColumns):
+def xmlWriter(processedDf, outputPath, mode ='overwrite', codec = None, *paritionColumns):
     if requiredPartitions(paritionColumns):
         processedDf.write.mode(mode).partitionBy(*paritionColumns).format('xml').save(outputPath, compression = codec)
     else:
